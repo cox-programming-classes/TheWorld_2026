@@ -5,6 +5,8 @@ namespace TheWorld.GameMechanics;
 /// This is the one place where all the Areas, Items, and Creatures are stored.  
 /// It is injected into every builder, so that they can add their new creations to the game data.
 /// 
+/// It also remembers where the player is, in CurrentArea.
+///
 /// TODO: we need to add Players here too, so that we can save and load the game state eventually.
 /// </summary>
 public record GameData
@@ -23,6 +25,26 @@ public record GameData
     /// All the Creature's in the game!
     /// </summary>
     private Dictionary<Guid, Creature> Creatures { get; init; } = [];
+
+    /// <summary>
+    /// Where the player is right now.  It's a label, not the Area itself, so it never goes stale:
+    /// gameData.Get(gameData.CurrentArea) always finds the latest version of the area, even after an Update.
+    /// It's null until WorldBuilder.BuildWorld sets it, and the only way to change it is TrySetCurrentArea.
+    /// </summary>
+    public AreaReferenceLabel? CurrentArea { get; private set; }
+
+    /// <summary>
+    /// Moves the player to an area.  Refuses an area that isn't in the GameData, the same way TryUpdate does,
+    /// so CurrentArea can never point at a place that doesn't exist.
+    /// </summary>
+    public bool TrySetCurrentArea(AreaReferenceLabel area)
+    {
+        if (!Areas.ContainsKey(area.Id))
+            return false;
+
+        CurrentArea = area;
+        return true;
+    }
 
     //--------------------------------------------------------------
     //  Methods for adding and retrieving Areas, Items, and Creatures.

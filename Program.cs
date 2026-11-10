@@ -1,14 +1,20 @@
 using TheWorld.GameMechanics;
-using TheWorld.GameMechanics.StockEntities;
+using TheWorld.Engine;
 using TheWorld.Display;
 
 using static TheWorld.Rules.DiceRollStrategies;
 
 // This is the one Random Number Generator for the whole program.  We inject it everywhere a roll happens.
 Random rng = new();
-// This is the one GameData for the whole program.  We inject it everywhere a new entity is created, so that it can be added to the game data.
-GameData gameData = new();
 
+// ─────────────────────────────────────────────────────────────────────────
+//  Initialize the world
+// ─────────────────────────────────────────────────────────────────────────
+
+// This is the one GameData for the whole program.  WorldBuilder fills it, and sets CurrentArea to where we start.
+GameData gameData = WorldBuilder.BuildWorld();
+
+// TODO:  The player still isn't in the GameData.  That's the Chapter 8, Part Four exercise, and it isn't done here yet.
 var player = PlayerBuilder
     .FromName("Kyroki")
     .WithHealthPoints(rng, Dice.D6 with { Count = 2, Modifier = 1 })
@@ -16,58 +22,52 @@ var player = PlayerBuilder
     .WithWallet(Money.Roll(rng, Dice.D100, Default))
     .Build();
 
-// Build hands back a ReferenceLabel:  a name for people to read, and an Id for the GameData to look up.
-var tree = ItemBuilder
-    .FromName("Tree")
-    .WithDescription("A big tree.  It has a lot of leaves.")
-    .Build(gameData);
-
-Console.WriteLine(gameData.Get(tree)?.Examine() ?? "nothing to look at");
-
-// A second tree, copied from the first.  Same name, same description, an identity of its own.
-var tree2 = ItemBuilder
-    .FromItem(gameData.Get(tree)!) // TODO: That ! is a hack.  We need to do something better someday...
-    .WithDescription("Another big tree.")
-    .Build(gameData);
-
-// One recipe, two goblins.  Each call to Build makes a brand-new Creature with an identity of its own.
-var goblinRecipe = CreatureBuilder
-    .FromName("Goblin")
-    .WithExperienceReward(50);
-var goblin = goblinRecipe.Build(gameData);
-var goblin2 = goblinRecipe.Build(gameData);
-
-var forest = AreaBuilder
-    .FromName("Forest")
-    .WithDescription("A dark forest.  It has a lot of trees.")
-    .WithItem(tree!)
-    .WithItem(tree2!)
-    .WithCreature(goblin!)
-    .WithCreature(goblin2!)
-    .Build(gameData);
-
-Console.WriteLine(gameData.Get(forest)?.LookAround() ?? "nothing to look at");
-
-var wolf = CreatureBuilder
-    .FromName("Wolf")
-    .WithExperienceReward(50)
-    .Build(gameData);
-
-var cave = AreaBuilder
-    .FromName("Cave")
-    .WithDescription("Damp, and it smells like goblin.")
-    .WithCreature(goblinRecipe.Build(gameData)!)
-    .WithCreature(goblinRecipe.Build(gameData)!)
-    .WithCreature(wolf!)
-    .WithNeighbor(forest!)
-    .Build(gameData);
-
-Console.WriteLine(gameData.Get(cave)?.LookAround() ?? "nothing to look at");
-
-// The forest was built before the cave existed, so it gets its way out by Update, through its builder.
-AreaBuilder.Edit(gameData.Get(forest)!)
-    .WithNeighbor(cave!)
-    .Update(gameData);
-Console.WriteLine(gameData.Get(forest)?.LookAround() ?? "nothing to look at");
-
 player.ShowSheet();
+Console.Info("Commands:  look, look <item>, go <place>, quit");
+Console.WriteLine();
+Console.WriteLine(gameData.Get(gameData.CurrentArea)?.LookAround() ?? "You are nowhere at all.");
+
+// ─────────────────────────────────────────────────────────────────────────
+//  The game loop:  read a command, do it, show what happened.  Again, until the player quits.
+//
+//  TODO:  Research (State Machine):  this loop treats every moment of the game the same way.
+//  In a fight, "go" should mean something else, or nothing at all.
+// ─────────────────────────────────────────────────────────────────────────
+
+var playing = true;
+while (playing)
+{
+    Console.Write("> ");
+    var line = Console.ReadLine();
+
+    // ReadLine hands back null when there's no more input at all (Ctrl+Z, or Ctrl+D on a Mac).  Treat it like quit.
+    if (line is null)
+        break;
+
+    var input = CommandParser.Parse(line);
+
+    // TODO:  Research (Command Pattern):  every new command means another case in this switch.
+    switch (input.Command)
+    {
+        case "":
+            break;
+
+        case "look":
+            Console.WriteLine(Commands.Look(gameData, input.Parameters));
+            break;
+
+        case "go":
+            Console.WriteLine(Commands.Go(gameData, input.Parameters));
+            break;
+
+        case "quit":
+            playing = false;
+            break;
+
+        default:
+            Console.Warn("I don't know how to \"{0}\".", input.Command);
+            break;
+    }
+}
+
+Console.WriteLine("Goodbye!");
