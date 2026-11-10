@@ -34,9 +34,11 @@ public static class WorldBuilder
             .WithDescription("Another big tree.")
             .Build(gameData);
 
-        // One recipe, as many goblins as we want.
+        // One recipe, as many goblins as we want.  The numbers are StockCreatures.Goblin's.
         var goblinRecipe = CreatureBuilder
             .FromName("Goblin")
+            .WithHealthPoints(HealthPoints.Create(7, Dice.D6 with { Count = 2 }))
+            .WithAbilities(AbilityScore.Create(8, 14, 10, 10, 8, 8)!)
             .WithExperienceReward(50);
 
         var forest = AreaBuilder
@@ -50,8 +52,11 @@ public static class WorldBuilder
 
         // ---- The cave, from Chapter 8:  two more goblins and a wolf. ----
 
+        // StockCreatures.Wolf's numbers.
         var wolf = CreatureBuilder
             .FromName("Wolf")
+            .WithHealthPoints(HealthPoints.Create(11, Dice.D8 with { Count = 2, Modifier = 2 }))
+            .WithAbilities(AbilityScore.Create(12, 15, 12, 3, 12, 6)!)
             .WithExperienceReward(50)
             .Build(gameData);
 

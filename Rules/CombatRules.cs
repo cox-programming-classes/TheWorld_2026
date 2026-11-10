@@ -6,7 +6,7 @@ namespace TheWorld.Rules;
 /// The numbers a fight needs.  These are Extension Properties that are only relevant when we are in a combat situation.
 /// This class will find a new home eventually, so this is really just example code for now ;)
 /// </summary>
-public static class Combat
+public static class CombatRules
 {
     extension(Player player)
     {

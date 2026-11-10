@@ -30,85 +30,13 @@ Each one is a question the code above can't answer yet.  You'll research it,
 reason about it, build it, and then teach it to the rest of us, because the
 other three projects will be building on top of yours.
 
-Work on a branch of your own, named for your project.
+| Project | Your branch | The question |
+|---|---|---|
+| [1 - Commands as Types](Projects/1_CommandsAsTypes.md) | `commands-as-types` | A command is a string right now.  What if it were a thing? |
+| [2 - Items That Do Things](Projects/2_ItemsThatDoThings.md) | `items-that-do-things` | A statue and a health potion are the same type.  They shouldn't be. |
+| [3 - Saving and Loading](Projects/3_SavingAndLoading.md) | `saving-and-loading` | The world lives in code.  It should be able to live in a file. |
+| [4 - Game States](Projects/4_GameStates.md) | `game-states` | In a fight, `go` shouldn't just walk you out of the room. |
 
-### 1 - Commands as Types
-
-Right now a command is a `string`, and the `switch` in `Program.cs` matches it
-to a method.  Every new command means another `case`, and nothing stops
-`"look"` from being misspelled in one place and spelled right in the other.
-
-Make every command a `record` of its own:  `Look`, `Go`, `Quit`, and whatever
-comes next, all sharing one root type.  The parser should hand back one of
-those records instead of a `ParsedInput`.
-
-This is polymorphism, coming at it from one direction:  many types that can all
-stand in the place of one.
-
-- What does the root type know, and what does each command record know?
-- Where does the code that *does* a command go:  inside the record, or beside it?
-  Argue it, using Chapter 3.
-- What happens to the `switch`?
-
-### 2 - Items That Do Things
-
-A Statue and a Health Potion are both just an `Item` right now, with a name and
-a description.  `StockItems.cs` sorts them into scenery, carryable, usable, and
-harder-to-sort, and that sorting only lives in the comments.
-
-Design and build at least `ICarryable` and `IUsable` as interfaces, and a
-handful of items of each kind.  Some items should be both.
-
-- Why interfaces, and not `CarryableItem` and `UsableItem` as child classes of
-  `Item`?  The Lantern is the case to think about.  So is the Brass Key.
-- Be ready to explain to the class how an interface is used differently from a
-  child class.  That explanation is part of the project.
-- You'll want `take` and `use` commands to test with.  Add them the way `look`
-  and `go` work now.  Project 1 will change how commands work, and that's
-  fine.
-
-### 3 - Saving and Loading
-
-Every time the game starts, `WorldBuilder` writes the world out in code.  A
-real game loads its world from a file, and saves your progress to one.
-
-Research JSON serialization in .NET (`System.Text.Json`), and the idea of a
-**DTO**, a Data Transfer Object.  Then build a way to save a `GameData` to a
-file, and to load one back:  something like `WorldBuilder.LoadWorld(path)`.
-
-- Our types fight serialization on purpose:  private constructors, private
-  dictionaries in `GameData`, `init`-only properties.  Why is a DTO the answer
-  to that, and not making everything `public`?
-- Read the `TODO` above every `Id`.  A loaded `Area` has to come back with the
-  identity it was saved with.  Why does that matter for every label that points
-  at it?
-- `AreaBuilder.FromJson` and `PlayerBuilder.FromJson` are waiting for you.
-
-### 4 - Game States
-
-The game loop treats every moment the same way.  In a fight, `go` shouldn't
-just walk you out of the room, and `attack` means nothing when nothing's there.
-
-Build a **state machine**.  `GameState` is the root type, and the game starts
-in an `Exploration` state.  The current state decides which commands are
-available, and what the loop does each time around.
-
-- What does a state know?  What does it decide?  Who decides when the state
-  changes?
-- Your first TODO is a `Combat` state.  How do you get into it, what can you do
-  while you're in it, and how do you get out?  `Rules/Combat.cs` has the
-  numbers a fight needs.
-
-### Where the projects meet
-
-None of these stays separate for long.
-
-- **1 and 4** both reach into the game loop.  Project 4 decides *which*
-  commands are available, and Project 1 decides *what a command is*.  Talk to
-  each other early.
-- **2** needs commands (`take`, `use`) that **1** will rebuild.
-- **3** has to save whatever **2** and **4** add to the game:  items of new
-  kinds, and which state the game is in.
-
-When your project is done, write down where it touches the others, as a
-question for them.  That list becomes our next conversation.
+Every project ends in a fifteen-minute presentation:  see
+[The Presentation](Projects/Presentation.md).  Keep your research log in
+`Projects/Notes/`, starting from [the template](Projects/Notes/Template.md).
