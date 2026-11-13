@@ -6,6 +6,9 @@ required.
 
 ## The problem, in my words
 
+Night before 11/13 class:
+
+
 What can't our game do yet, and why can't the code we have do it?  Write it
 before you read anything, then come back and rewrite it at the end.
 
