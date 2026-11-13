@@ -4,28 +4,13 @@ State Machines
 
 
 ## The problem, in my words
-A state machine is a behavioral model and programming paradigm in which a program or system 
-can only ever be in one of a finite number of distinct states at any given time. 
-It changes from one state to another (a transition) only when triggered by specific inputs, 
-events, or conditions.
 
-Walk into the cave.  There are two goblins and a wolf in there, and nothing happens.  
-You can look, you can go forest, and the goblins never notice.
-
-Open Program.cs and read the loop.  
-Every time around, it does the same thing:  
-read a line, match the command, print the result.  
-It treats every moment of the game the same way.  
-And it already keeps one piece of state, in a bool called playing.
-
-A real game has modes.  Exploring is one.  
-A fight is another, and in a fight the commands mean different things:  
-attack matters, go doesn't just walk away, and the game doesn't move on until the fight's over.
-
-Your job is to build a state machine.  
-GameState is the root type, and the game starts in a state called Exploration.  
-The current state decides which commands are available, and what the loop does each time around.
-Your first new state is Combat.
+The problem is that when the goblin attacks you, you have to attack it back or flee; 
+you shouldn't just be able to go to a different place. 
+Today, when I type attack goblin, it just says "I don't know how to attack." 
+So, even if it attacked you, you wouldn't be able to attack it back. 
+You have to add a state machine to be able to track "in a fight" 
+to be able to have the loop that is "playing" as well as be able to attack in a state.
 
 ## Sources
 
@@ -82,6 +67,75 @@ State Machine:
 - Exploration
 - Combat
 
+11/13 class:
+== Kyroki ==  level 1, 0 XP
+HP 6/6    Gold 10
+STR 13 (+1)   DEX 13 (+1)   CON 17 (+3)
+INT 11 (+0)   WIS 13 (+1)   CHA  9 (+0)
+
+Commands:  look, look <item>, go <place>, quit
+
+You are in Clearing.
+A patch of sunlight at the edge of the forest.  Someone camped here, not long ago.
+You see the following items:
+- Statue
+- Lantern
+- Locket
+- Health Potion
+- Chest
+  From here you can go to:
+- Forest
+
+After Typing Commands:
+/Users/haileyduan/Documents/GitHub/TheWorld_2026/bin/Debug/net10.0/TheWorld_2026
+== Kyroki ==  level 1, 0 XP
+HP 10/10    Gold 11
+STR 15 (+2)   DEX 17 (+3)   CON  8 (-1)
+INT  8 (-1)   WIS 13 (+1)   CHA 11 (+0)
+
+Commands:  look, look <item>, go <place>, quit
+
+You are in Clearing.
+A patch of sunlight at the edge of the forest.  Someone camped here, not long ago.
+You see the following items:
+- Statue
+- Lantern
+- Locket
+- Health Potion
+- Chest
+  From here you can go to:
+- Forest
+
+> go forest
+You are in Forest.
+A dark forest.  It has a lot of trees.
+You see the following creatures:
+- Goblin
+- Goblin
+  You see the following items:
+- Tree
+- Tree
+  From here you can go to:
+- Cave
+- Clearing
+
+> look
+You are in Forest.
+A dark forest.  It has a lot of trees.
+You see the following creatures:
+- Goblin
+- Goblin
+  You see the following items:
+- Tree
+- Tree
+  From here you can go to:
+- Cave
+- Clearing
+
+Next I tried doing the command "attack":
+I expected that it would be able to attack. However it says the following:
+> attack goblin
+I don't know how to "attack".
 
 
 ## Decisions
@@ -95,6 +149,12 @@ In Combat, attack rolls a d20 plus your AttackBonus against the creature's Armor
 Your notes file, with the answers to the questions above, your state diagram, 
 your sources, and your decisions.
 
+## Finished means three things
+The code is on your branch, pushed, and green, and it does everything in What you're building.
+The notes have the questions answered in your words, your state diagram, your sources, 
+and every decision you made with what it cost.
+The presentation is given.  See The Presentation page:  
+fifteen minutes, and one part of it is adding a new state, live, in front of us.
 
 ## Questions for the others
 
@@ -106,12 +166,10 @@ Talk to each other in the first class, and agree on what the loop hands to a sta
 - and thus the command wouldn't be available if you were in a different state like Combat
 - because then there would nothing to look at. 
 
-
 Items That Do Things might want use to work in a fight.  A health potion would.
 - Yes, a health potion would want to be used in a fight because if the state was "Combat",
 - it would be useful if you could use the item, "health potion", if you
-- wanted to heal yourself. 
-
+- wanted to heal yourself.
 
 Saving and Loading might want to save which state the game is in.  
 Can you save in the middle of a fight?
