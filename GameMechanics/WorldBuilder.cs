@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TheWorld.GameMechanics.StockEntities;
 
 namespace TheWorld.GameMechanics;
@@ -82,6 +83,20 @@ public static class WorldBuilder
             .WithItem(ItemBuilder.FromItem(StockItems.Chest).Build(gameData)!)
             .WithNeighbor(forest!)
             .Build(gameData);
+
+        
+      //  string json = JsonSerializer.Serialize(clearing!);
+       // Console.WriteLine(json);
+       
+       //var area = gameData.Get(clearing!);
+      // string json = JsonSerializer.Serialize(area);
+      // Console.WriteLine(json);
+       //var copy = JsonSerializer.Deserialize <Area> (json);
+
+      // var creature = gameData.Get(wolf!);
+      // string json2 = JsonSerializer.Serialize(creature);
+      // Console.WriteLine(json2);
+      // var copy2 = JsonSerializer.Deserialize <Creature> (json2);
 
         // ---- Ways out.  The forest was built first, so it learns about the others by Update. ----
 

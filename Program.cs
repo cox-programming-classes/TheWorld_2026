@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TheWorld.GameMechanics;
 using TheWorld.Engine;
 using TheWorld.Display;
@@ -13,6 +14,8 @@ Random rng = new();
 
 // This is the one GameData for the whole program.  WorldBuilder fills it, and sets CurrentArea to where we start.
 GameData gameData = WorldBuilder.BuildWorld();
+
+//Console.WriteLine(JsonSerializer.Serialize(gameData));
 
 // TODO:  The player still isn't in the GameData.  That's the Chapter 8, Part Four exercise, and it isn't done here yet.
 var player = PlayerBuilder
