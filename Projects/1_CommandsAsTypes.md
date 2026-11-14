@@ -72,11 +72,16 @@ you'll need them.
 
 1. Nystrom says a command is *"a reified method call."*  What does *reified*
    mean?  What does our `switch` have that isn't reified yet?
+   2. "reify" means to "make real" – that is, to turn some abstract concept into an object (a piece of data). "reifying" something means to make it first class.
 2. What can a program do with a command that's an object, and can't do with a
    command that's a word?  Find at least two things.  Which of them might our
    game want someday?
+   3. (create buttons; can be done using switch but more organized using command object)
+   4. creating a 'history' of past actions so that the player can undo and redo actions
+   4. input an action into another function 
 3. What is a **root type**, and what does it mean for a `Go` to "stand in the
    place of" a `Command`?  What does C# check for you when it does?
+   4. a root type is the type under which other related types sit. in this case, Command is the root, and look, go, and quit sit under it. go could stand in the place of Command because go is a type of command. what c# checks is that the type we assign corresponds with the type that is expected; for example, we cannot assign a string to a Command variable. 
 
 ### Reading our code
 
