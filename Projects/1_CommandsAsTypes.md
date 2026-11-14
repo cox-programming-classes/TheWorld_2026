@@ -89,11 +89,18 @@ you'll need them.
 
 4. Search the project for every place the word `"go"` appears.  How many places
    have to agree on how it's spelled?  What happens if one of them doesn't?
+   5. the string "go" appears once in the switch statement of Program.cs. the method name Go appears in Commands.cs (where the method actually lives) and in Program.cs, where the switch statement calls it. 
+   6. the string "go" isn't checked by anything, so if you changed it to "move" the compiler would not say anything; then, if a player typed "go north," this would be treated as the default case and "I don't know how to "go"" would be printed.
+   7. on the other hand, if Go as in the method name was changed, there would be an error in Program.cs because the switch statement still calls it as Go. 
 5. `Commands.Go` checks whether it got a destination.  Whose job should that
    be?  Think back to Chapter 2:  a type that can't be built in an invalid
    state.  What should `go`, with nothing after it, turn into?
+   6. the parser is the first place that sees the "go" with nothing after it, so it should be the parser's job to check whether there is a destination as a type cannot be built in an invalid state.
+   7. because it doesn't have a destination, "go" with nothing after it could turn into, for example, a MissingDestination object so the parser could still return a Command object (i.e. not null).
 6. What should the parser hand back for `dance`, or for an empty line?  Is
    `null` a good answer?  Why or why not?
+   8. returning 'null' (rather than a Command) wouldn't be a good answer because the code could fail later on (recall the idea from Chapter 2 that a type that can't be built in an invalid state saves the caller (you) from having to check whether it got a Command or null).
+   9. what it should hand back for dance is an UnknownCommand object. what it should hand back for an empty line is an EmptyLine object. and the 'error message' could live inside the corresponding object so the loop just prints it. 
 
 ### Designing it
 
