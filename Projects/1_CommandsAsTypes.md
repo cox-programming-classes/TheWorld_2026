@@ -72,11 +72,13 @@ you'll need them.
 
 1. Nystrom says a command is *"a reified method call."*  What does *reified*
    mean?  What does our `switch` have that isn't reified yet?
-   2. "reify" means to "make real" – that is, to turn some abstract concept into an object (a piece of data). "reifying" something means to make it first class.
+   2. "reify" means to "make real" – that is, to turn some abstract concept into an object (a piece of data). "reifying" something means to make it first class. 
+   3. what our switch has that isn't reified yet are "go", "look", "quit" etc. these are only labels to identify the case, and after the call runs nothing is left behind. 
 2. What can a program do with a command that's an object, and can't do with a
    command that's a word?  Find at least two things.  Which of them might our
    game want someday?
-   3. (create buttons; can be done using switch but more organized using command object)
+   3. all of these options could be things we might want in our game someday:
+   4. create and remap buttons: you can create buttons that represent actions/commands and easily swap out which buttons correspond to what actions because the actions are all objects.
    4. creating a 'history' of past actions so that the player can undo and redo actions
    4. input an action into another function 
 3. What is a **root type**, and what does it mean for a `Go` to "stand in the
