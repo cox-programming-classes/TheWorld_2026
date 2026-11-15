@@ -183,3 +183,23 @@ Can you save in the middle of a fight?
 - would not have to restart from the "Exploration" state.
 
 
+Period 1 and HW for Period 2:
+
+Question 1:
+A state machine is a program with a finite number of states. 
+An example with a door, the states are Closed and Open, 
+and what moves it from Closed to the state Open is a transition, which is the move itself. 
+The word "push" written on that arrow is the trigger. 
+It's the thing that makes the move happen.
+Note: the door diagram is on paper.
+
+Question 2:
+The flags go wrong because they add more combinations, which can't happen in the real game, 
+and a state machine prevents that. 
+For instance, playing is false for one combination and infight is true.
+
+Question 3:
+
+
+Question 4:
+Note: the game diagram is on paper.
