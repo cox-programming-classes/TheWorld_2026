@@ -199,7 +199,12 @@ and a state machine prevents that.
 For instance, playing is false for one combination and infight is true.
 
 Question 3:
-
+A state machine is in one state at a time, for example, 
+like a door that has Closed or Open, 
+and pushing it in the Closed seat would make the state Open, 
+and pulling it from Open would make it closed. 
+The State pattern is making the Closed state one piece of code 
+that knows what to do and same with the Open state.
 
 Question 4:
 Note: the game diagram is on paper.
