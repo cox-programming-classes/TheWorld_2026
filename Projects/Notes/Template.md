@@ -208,3 +208,14 @@ that knows what to do and same with the Open state.
 
 Question 4:
 Note: the game diagram is on paper.
+
+Period 2 and HW for Period 3:
+
+Question 5:
+Part 1) If the user tries to type "go Cave," 
+it would just say a message that "You can't leave in the middle of a fight. 
+Try another command like attack or flee," to tell the player what command they could use next. 
+
+Part 2) I picked attack to start the fight as that would only be one word 
+that can be used to get into the fight and attack the person, 
+though the cost could be that it could be confusing to the user.
