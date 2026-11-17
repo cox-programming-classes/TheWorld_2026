@@ -237,6 +237,8 @@ The Combat also knows the ID of the one creature it is fighting,
 since if there were two goblins, 
 then the name wouldn't be enough as you would need to tell them apart.
 
+Period 3 and HW for Period 4:
+
 Question 7:
 
 The loop's cost is that it would have to know which state it is in, 
