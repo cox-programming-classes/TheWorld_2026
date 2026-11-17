@@ -5,6 +5,7 @@ public record ItemBuilder
     // Default values for every part of an Item, the same trick PlayerBuilder and CreatureBuilder use.
     private string _name = "Thingamajig";
     private string _description = string.Empty;
+    private Item? _prototype;
 
     private ItemBuilder() { }
 
@@ -19,7 +20,7 @@ public record ItemBuilder
     /// Start with a FROM method.  An item starts from the parts of an existing item, which can then be changed.
     /// The Id isn't one of the parts:  Build gives every new Item an identity of its own.
     /// </summary>
-    public static ItemBuilder FromItem(Item item) => new() { _name = item.Name, _description = item.Description };
+    public static ItemBuilder FromItem(Item item) => new() { _name = item.Name, _description = item.Description, _prototype = item};
 
     /// <summary>
     /// Adds a description to the item being built.  This is optional, but recommended.
@@ -34,8 +35,9 @@ public record ItemBuilder
     /// StockItems uses this one, just like StockCreatures uses CreatureBuilder's.
     /// Every call builds a brand-new Item, so the same builder can make as many trees as you want.
     /// </summary>
-    public Item Build() => new(_name, _description);
-
+    public Item Build() => _prototype is null
+        ? new(_name, _description)
+        : _prototype with { Id = Guid.NewGuid(), Name = _name, Description = _description };
     /// <summary>
     /// Builds the item and adds it to the game data.
     /// </summary>

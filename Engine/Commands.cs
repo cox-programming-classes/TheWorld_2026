@@ -1,4 +1,5 @@
 using TheWorld.GameMechanics;
+using TheWorld.GameMechanics.Items;
 
 namespace TheWorld.Engine;
 
@@ -53,5 +54,62 @@ public static class Commands
             return $"You can't get to {name} from here.";
 
         return gameData.Get(neighbor)!.LookAround();
+    }
+
+    public static string Take(GameData gameData, IReadOnlyList<string> parameters)
+    {
+        var area = gameData.Get(gameData.CurrentArea);
+        if (area is null)
+            return "You are nowhere at all.  (CurrentArea was never set.)";
+
+        if (parameters.Count == 0)
+            return area.LookAround();
+
+        // Item names can have spaces in them, like "health potion", so every parameter is part of the name.
+        var name = string.Join(' ', parameters);
+        var label = area.Items.FirstOrDefault(l => l.Label.Equals(name, StringComparison.OrdinalIgnoreCase));
+        
+        var item = gameData.Get(label);
+
+        if (item is ICarryable)
+            return $"You take the {item.Name}.";
+
+        else if (item is null)
+            return $"You don't see any {name} here.";
+
+        else
+            return "Nice try, you cant take this item. ";
+
+    }
+    //TODO:THIS IS UNFINISHED
+    
+    //^^^^^^^^^^^^^^^
+    //^^^^^^
+    //^^^^^
+    //^^^^^
+    public static string Use(GameData gameData, IReadOnlyList<string> parameters)
+    {
+        var area = gameData.Get(gameData.CurrentArea);
+        if (area is null)
+            return "You are nowhere at all.  (CurrentArea was never set.)";
+
+        if (parameters.Count == 0)
+            return area.LookAround();
+
+        // Item names can have spaces in them, like "health potion", so every parameter is part of the name.
+        var name = string.Join(' ', parameters);
+        var label = area.Items.FirstOrDefault(l => l.Label.Equals(name, StringComparison.OrdinalIgnoreCase));
+        
+        var item = gameData.Get(label);
+
+        if (item is ICarryable)
+            return $"You take the {item.Name}.";
+
+        else if (item is null)
+            return $"You don't see any {name} here.";
+
+        else
+            return "Nice try, you cant take this item. ";
+
     }
 }

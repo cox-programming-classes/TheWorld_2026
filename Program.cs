@@ -23,7 +23,7 @@ var player = PlayerBuilder
     .Build();
 
 player.ShowSheet();
-Console.Info("Commands:  look, look <item>, go <place>, quit");
+Console.Info("Commands:  look, look <item>, go <place>, quit, take, take <item>");
 Console.WriteLine();
 Console.WriteLine(gameData.Get(gameData.CurrentArea)?.LookAround() ?? "You are nowhere at all.");
 
@@ -63,7 +63,13 @@ while (playing)
         case "quit":
             playing = false;
             break;
-
+        case "take":
+            Console.WriteLine(Commands.Take(gameData, input.Parameters));
+            break;
+        //case "use":
+            //Console.WriteLine(Commands.Use(gameData, input.Parameters));
+            //break;
+        
         default:
             Console.Warn("I don't know how to \"{0}\".", input.Command);
             break;

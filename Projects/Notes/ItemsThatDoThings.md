@@ -40,13 +40,15 @@ if you were to do this with child classes, you would need a greater amount of cl
 ICarryable and IUsable promises that the item can implement it but it does not define or state exactly how/what the item implements
 
 **How does take find out whether the thing you named can be taken?  Look up the is keyword in the pattern-matching docs.**
+take finds out if you can take it by looking at whether the item has a method for how to carry it and if it is ICarryable
 
 **Taking an item changes the area it was in.  In Chapter 8, how did a stored area change?**
+A stored area changed by making a copy of the area so you could edit it and there would have to be a new ID instead of attempting to edit the original area
 
 **Where does an item go when you pick it up?  The Player isn't in the GameData yet.  Decide where carried things live, and defend it.**
-carried things should live in an inventory becuase it makes sense for a player to be able to carry multiple things at once and not constantly putting one down. This would also come into play with the inventory needed to fight in the combat state machine. 
+carried things should live in an inventory because it makes sense for a player to be able to carry multiple things at once and not constantly putting one down. This would also come into play with the inventory needed to fight in the combat state machine. 
 
 **ItemBuilder.Build() always makes a plain Item.  How does a Lantern get built, and filed in the GameData?  Before you decide, read how WorldBuilder files the stock items.  Then make StockItems.Lantern hand back a Lantern, and check whether the lantern in the clearing is one.  Write down what you find, and why.**
-
+Item builder just copies the name and the description but it does not copy the ID. Lantern gets built in its own record from a name and description but it has its own methods. the lantern would get filed in the gamedata using Update gamedata and replace something already stored. 
 
 **Using the lantern should light it.  But a Lantern is a record, and it can't change.  In Chapter 8, how did a stored thing change?**
