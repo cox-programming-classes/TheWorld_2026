@@ -219,3 +219,54 @@ Try another command like attack or flee," to tell the player what command they c
 Part 2) I picked attack to start the fight as that would only be one word 
 that can be used to get into the fight and attack the person, 
 though the cost could be that it could be confusing to the user.
+
+Question 6:
+
+Part 1)
+The state would be able to decide which commands like look, go, and attack commands 
+are available to use based on the state it is in. With the state deciding, 
+the loop can just tell the state to handle it.
+
+Part 2)
+A state needs to process every command. 
+For example, if the user types "attack goblin," 
+then if they type "attack" again, 
+Combat should know which creature the second attack is aimed at.
+
+The Combat also knows the ID of the one creature it is fighting, 
+since if there were two goblins, 
+then the name wouldn't be enough as you would need to tell them apart.
+
+Question 7:
+
+The loop's cost is that it would have to know which state it is in, 
+and pick what happens, so every new state adds more checks to the loop. 
+I am choosing the state to decide. 
+So, the state's cost is that you would have to tell it which state comes next. 
+When the state decides, the loop stays short and never changes.
+
+Question 8:
+When the player types "flee," the game goes to previous state, 
+which is Exploration, and no, Exploration does not need Combat 
+to tell it where you are as it should already know. 
+No, flee will not always go to Exploration if you add a third state later.
+It would cost that if a third state can start a fight, 
+Combat has to remember which state to go back to. 
+It doesn't currently, because the answer is always Exploration.
+The goblin's health would have to be updated in either the Combat state 
+or in the creature itself, stored back in the GameData.
+
+Notes for coding:
+
+In "Light," "abstract" means you can't create an instance of the type, 
+and in "Next()" it means that Light has a method but doesn't say what it does. 
+Override means it doesn't touch past commands, 
+and for example, Red's "Next" says that the next state is Green. 
+Next hands back the next state, 
+so that's what you decide comes next by writing the name of the next state.
+
+The loop has a ParsedInput that the state needs in order to react. 
+GameState promises that every state can take a ParsedInput and hand back the next state, 
+which the loop keeps so it knows which state to call next time around and text to print, 
+which the player sees.
+
