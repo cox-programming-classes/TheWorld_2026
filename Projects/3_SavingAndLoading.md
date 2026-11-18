@@ -37,6 +37,7 @@ whatever is in a file.  You get to work out how both can be true.
 (in my own words):
 The main problem is that our game doesn't function like a regular game: the programmer has to code new areas, new objects, etc., physically, and the world (through GameData) cannot be saved. However, a real game saves data into a file (JSON), which allows the person to not have to continue adding new objects to the game and have their progress saved. The project tries to solve this issue, also regarding the fact that we use private dictionaries, which stop the serializer from writing, alongside private constructors that prevent it from reading. However, we make these private so that the type cannot be built in an invalid state.
 
+record - public serialization
 
 
 ## Where to start looking
@@ -164,30 +165,60 @@ Martin Fowler's short entry on the **Data Transfer Object**:
   [martinfowler.com/eaaCatalog/dataTransferObject.html](https://martinfowler.com/eaaCatalog/dataTransferObject.html).
 
 
+Object -> DTO -> text file (and then back again) - save() and load()
+saving areas and other areas
 ### Designing it
 
 6. The error in question 5 has a quick fix:  make everything `public`.  What
    would we lose?  Think back to Chapter 2, and to every private constructor
    since.
+If we made everything public, then we would lose the checks; for instance, if AbilityScore had a public constructor
+instead of a private constructor, then anyone could skip "Create" and build a score outside the range.
+Through serialization, where data is held in a file, then a person could edit the score such that it is 40 (outside the range) and the public constructor would allow it to build.
+
 7. A DTO is plain data, with no rules.  The domain types are the opposite.  So
    who turns a DTO back into an `Area`?  We already have code whose whole job
    is to put an `Area` together correctly.  Can loading go through it?
+   You (the programmer) turn a DTO back into an Area by writing the code that reads the AreaDTO and calls specific methods, such as FromName (for name), WithDescription (for description), etc. Loading can go through the builders, but only for the name, description, and labels for items and neighbors. 
+It returns an Id, but a new one from Guid.NewGuid(), not the saved Id of the area because there's no method that takes a plain Guid from the outside (it either leaves _id empty or requires a pre-existing Area).
+
 8. **Identity.**  Every label in the game holds a `Guid`.  When you load an
    `Area`, it has to come back with the `Id` it was saved with.  Why?  What
    happens to the forest's neighbors if the cave comes back with a new one?
    Right now, which code is allowed to choose an `Id`?
+   The area must come back with its saved Id because a label is only a name and an Id, and the game identifies objects using the Id. Thus, if the cave comes back with a new Id, as the forest's label still holds the old Id, it points to nothing, and thus, "go cave" fails. 
+Code that can choose an Id right now is AreaBuilder Edit and also the public init on Id.
+
+
+
 9. `GameData` keeps its dictionaries `private`.  To save it, something has to
    see inside.  What's the smallest door you can open?  Should `GameData` make
    its own DTO, or hand out what it's holding?
+   The smallest door you can open is a read-only view of the dictionaries, such that outside code can look at the dictionaries but are unable to add, remove, or change anything (which is what is necessary for save). 
+GameData should hand out what it's holding, allowing the rest of the code to know how the data is being stored, but the cost of this method is that if you were to change GameData, then the rest of the code would change as well (i.e., the rest of the code now depends on GameData using a dictionary keyed by Guid).
+
 10. What *isn't* worth saving?  Is there anything you can work out again from
     what you did save?
+    Minimum and maximum aren't worth saving because they come from computations with the saved count, side, and modifier of the dice for an object (like a creature). 
+Additionally, you could work these values out after loading from the three values you did save. If they are saved, then the copy could potentially disagree with the values it comes from (e.g., a Maximum of 99 with count = 2, sides = 8, and modifier = 2).
+
 11. When you run `dotnet run`, where does your save file actually end up on
     disk?  Find it.  Then decide whether it belongs in git, and if it doesn't,
     keep git from picking it up.
+
+
 12. A creature's `HitDice` is a `Dice`.  You can save its three numbers.  How
     do you get a `Dice` back, when its constructor is private and there are
     only eight standard dice to start from?
+You get a Dice back by choosing from the eight standard dice (for instance, dice with 8 sides (and thus Dice.D8 using a switch)) and using "with" expressions for Count and Modifier, which are public, because Dice's constructor is private.
 
+
+
+- areas have collections of items that already exist
+  AreaDTO
+- ItemReferenceLabel - already DTO because it carries a reference to the item : unchanged
+    - Creatures (CreatureReferenceLabel)
+    - Neighbors : List<ARL> - Area
 ## What you're building
 
 1. A set of DTOs:  plain records that hold everything the game needs to come

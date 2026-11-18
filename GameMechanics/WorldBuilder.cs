@@ -111,4 +111,23 @@ public static class WorldBuilder
 
         return gameData;
     }
+
+    public static void SaveWorld(GameData gamedata, string path)
+    {
+        var itemDtos = gamedata.ReadItems.Values.
+            Select(i => new ItemDto(i.Id, i.Name, i.Description)).
+            ToList();
+        
+        var areaDtos = gamedata.ReadAreas.Values
+            .Select(a => new AreaDto(a.Id, a.Name, a.Description, a.Items, a.Creatures, a.Neighbors)).
+            ToList();
+       
+        var dto = new GameDataDto(itemDtos, areaDtos, gamedata.CurrentArea);
+        
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string json = JsonSerializer.Serialize(dto, options);
+        File.WriteAllText(path, json);
+        Console.WriteLine(Path.GetFullPath(path));
+    }
+ 
 }
