@@ -102,11 +102,20 @@ you'll need them.
    8. returning 'null' (rather than a Command) wouldn't be a good answer because the code could fail later on (recall the idea from Chapter 2 that a type that can't be built in an invalid state saves the caller (you) from having to check whether it got a Command or null).
    9. what it should hand back for dance is an UnknownCommand object. what it should hand back for an empty line is an EmptyLine object. and the 'error message' could live inside the corresponding object so the loop just prints it. 
 
+just convert existing commands into this structure
 ### Designing it
+
+give Command a behavior, which is to execute (pub abstract void execute() method) - a command must be able to execute
+    Command: commandname & parameters 
+
+
+Word: open-closed principle ; open to extension but closed to modification (e.g. Command)
 
 7. What does the root `Command` know that every command shares?  Is there
    anything at all?
+   8. the root 'Command' won't necessarily know anything that every command shares because each individual command depends on what that specific command is intended to do, and those intended commands may not have anything in common at the moment.
 8. What does `Go` know that `Look` doesn't?  What about `Quit`?
+   9. Each knows certain parameter(s) that the others don't necessarily know; for example, Go carries the destination, Look carries the thing being looked at (and/or just looking around), and Quit carries nothing. In all, each record carries only what the player chose.  
 9. **The big one.**  Where does the code that *does* a command go?  There are
    two homes for it.  **Inside** each record, as a method every command has
    its own version of.  Or **beside** the records, in one place that looks at
@@ -115,14 +124,31 @@ you'll need them.
    you write either.  For each one, count what it costs to add one new
    command.  Then count what it costs to add one new *thing every command can
    do*, like a line of help text.
+   10.  using an "inside" structure would prioritize (i.e. make it easier to) making NEW COMMANDS
+   11. using an "outside" structure would prioritize (i.e. make it easier to) make NEW THINGS COMMANDS CAN DO
+   12. example of an inside structure (each record has its own method)
+       13. abstract record Shape { public abstract double Area(); }
+           record Circle(double Radius) : Shape { public override double Area() => 3.14 * Radius * Radius; }
+           record Square(double Side) : Shape { public override double Area() => Side * Side; }
+   14. example of an outside structure (the records are plain data, and one place decides what to do for each type)
+       15. abstract record Shape;
+           record Circle(double Radius) : Shape;
+           record Square(double Side) : Shape; static double Area(Shape s) => s switch { Circle c => 3.14 * c.Radius * c.Radius, Square q => q.Side * q.Side,_ => throw new Exception("unknown shape")};
+   16. i believe we want to be prioritizing the ease of making entirely new commands and not that of adding new things that commands can do, thus we should use an "inside" structure. however, having an 'inside' structure does make it so that if you want to add something that commands can do, you would have to add it to every single record individually so that might be more inconvenient
 10. How does `quit` stop the loop when it's a type instead of a `case`?
+    11. right now quit is a case, but we could make Quit its own command. there would be two options for how this command would work:
+        12. 1, we treat Quit as a command like any other command type, wherein the loop would have to ask whether the command is Quit. 
+        13. 2, the Quit command is a boolean ; the loop asks every command you use whether EndGame is true, so every command answers the same yes/no question 
+    14. perhaps we should make it a command like any other just for the sake of consistency with other commands...
+        15. but if there was another command that we added that stopped the game (e.g. "pause") we would have to check for that as well
 11. If your commands go *beside* the records, in a `switch` on the type, leave
     one command out of it on purpose.  What does the compiler say?  Does it
     tell you which one you forgot?  Now add the `_` case it's asking for, and
     leave one out again.  What does that tell you about who's keeping track?
+    12. 
 
 ## What you're building
-
+---
 1. A root type, `Command`, and a `record` for each of `Look`, `Go`, and
    `Quit`.
 2. At least one new command of your own, as a record.  `help` is a good
