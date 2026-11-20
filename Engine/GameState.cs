@@ -48,6 +48,12 @@ public record Exploration : GameState
             output = "";
             return new GameOver();
         }
+
+        if (input.Command == "rest")
+        {
+            output = "Zzz...";
+            return new Rest();
+        }
         if (input.Command == "")
         {
             output = "";
@@ -110,5 +116,42 @@ public record GameOver : GameState
     {
         output = "";
         return this;
+    }
+}
+
+public record Rest : GameState
+{
+    public override GameState Next(ParsedInput input, GameData gameData, Player player, Random rng, out string output)
+    {
+        if (input.Command == "")
+        {
+            output = "You are now Resting. Try another command like wake to leave the rest state.";
+            return this;
+        }
+
+        if (input.Command == "wake")
+        {
+            output = "You wake up.";
+            return new Wake();
+        }
+
+        output = "Zzz...";
+        return this;
+    }
+
+    public record Wake : GameState
+    {
+        public override GameState Next(ParsedInput input, GameData gameData, Player player, Random rng,
+            out string output)
+        {
+            if (input.Command == "look")
+            {
+                output = "You are back in Exploration.";
+                return new Exploration();
+            }
+
+            output = "Blink blink";
+            return this;
+        }
     }
 }
