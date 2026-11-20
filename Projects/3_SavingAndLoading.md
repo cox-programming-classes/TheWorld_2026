@@ -121,7 +121,7 @@ at System.Text.Json.JsonSerializer.ReadFromSpan[TValue](ReadOnlySpan`1 utf8Json,
 at TheWorld.GameMechanics.WorldBuilder.BuildWorld() in /Users/emilyjiang/Documents/GitHub/TheWorld_2026/GameMechanics/WorldBuilder.cs:line 89
 at Program.<Main>$(String[] args) in /Users/emilyjiang/Documents/GitHub/TheWorld_2026/Program.cs:line 16
 
-For Area, the error states that the serializer can only use three kinds of constructor: a public parameterless one, a single public parameterized one, or one marked with a parameterized constructor. The JSON printed was an AreaReferenceLabel (for clearing), and the exception regarded the Area's internal constructor. 
+For Area, the error states that the serializer can only use three kinds of constructor: a public parameterless one, a single  parameterized one, or one marked with a parameterized constructor (JsonConstructorAttribute). The JSON printed was an AreaReferenceLabel (for clearing), and the exception regarded the Area's internal constructor. 
 
 (for Area, second run, JSON was full Area: ID, Name, Description, Items, Creatures, Neighbors) /Users/emilyjiang/Documents/GitHub/TheWorld_2026/bin/Debug/net10.0/TheWorld_2026
 {"Id":"21abb70c-376e-407f-b4d3-15234e64487b","Name":"Clearing","Description":"A patch of sunlight at the edge of the forest.  Someone camped here, not long ago.","Creatures":[],"Items":[{"Label":"Statue","Id":"1186a931-0704-496a-93f9-b0d7d6fd8636"},{"Label":"Lantern","Id":"464b9147-29ed-4ada-82f6-6217ad146bad"},{"Label":"Locket","Id":"a0ea55b0-e7dc-49a7-9b76-1f9b273db18a"},{"Label":"Health Potion","Id":"ab62aec1-031b-4d29-b0f9-052a177dde54"},{"Label":"Chest","Id":"97055b32-8658-4a60-98fc-eab956fa03cd"}],"Neighbors":[{"Label":"Forest","Id":"f8500936-bd07-4671-b810-e205c1989df4"}]}
