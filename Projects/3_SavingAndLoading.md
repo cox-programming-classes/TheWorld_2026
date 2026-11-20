@@ -205,6 +205,9 @@ Additionally, you could work these values out after loading from the three value
 11. When you run `dotnet run`, where does your save file actually end up on
     disk?  Find it.  Then decide whether it belongs in git, and if it doesn't,
     keep git from picking it up.
+After running "dotnet run" in Terminal,  the save file ends up in the project itself, TheWorld_2026 (rather than the bin (just the build output, the compiled game but not the source code) by using Rider's green arrow).
+The save file doesn't belong in the git:
+    - used gitignore file in Rider and wrote "gamedata.json" to prevent it from belonging in git (each individual's gamedata/save file should be different from others, and thus it could cause conflicts if put together in the shared git)
 
 
 12. A creature's `HitDice` is a `Dice`.  You can save its three numbers.  How
