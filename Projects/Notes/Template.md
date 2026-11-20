@@ -300,7 +300,44 @@ When the player presses Enter on a blank line,
 it prints nothing and the prompt to type a command again, comes back.
 
 Question 12:
+For the cost of making the lost health remembered in the combat state, 
+if the player flees and comes back, the goblin would be at full health again.
+The benefit would be that there would be no changes to the starter files.
 
+Follow-up notes during coding after question 12:
+A roll is a fine choice, and there are both costs and benefits:
+a big roll can wipe out a goblin fast, but it's random, which is good.
+
+In terms of the die choices during the Combat state, 
+a d4 means more attacks per fight, so the fight can drag on. 
+The benefit is that a hit never wipes out a goblin.
+
+States with AreaBuilder coding:
+Question 1:
+Edit(area) starts a builder from an area that's already in GameData, 
+and it keeps the area's Id.
+Update(gameData) puts the changed area back where the old one was.
+WithCreature(label) adds a creature to the list.
+Nothing removes a creature. There's no WithoutCreature, so you'd have to add one.
+
+Question 2:
+The two goblins both say "Goblin", but each has its own Id, so Id tells them apart.
+The goblin to leave out is the one whose Id matches the goblin in the fight. 
+Combat holds that label in Enemy, so Enemy.Id is the Id to leave out.
+
+WithCreature builds the new list from the old creatures plus one more. 
+A removing version builds it from the old creatures, 
+keeping only the ones that don't match. 
+
+Question 3:
+The cost of removing the goblin once it dies is that
+once the goblin is gone, the player can't fight it, look at it, or see that it died.
+Removal buys a Forest that matches what happened: a dead goblin isn't there anymore.
+
+A second cost, is that AreaBuilder.cs is changed, 
+which the other projects also use. 
+A benefit is that a dead goblin that stays would break the game's own rules, 
+and removal keeps the game's rules. 
 
 Notes for coding:
 

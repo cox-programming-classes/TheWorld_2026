@@ -27,6 +27,11 @@ public record Exploration : GameState
         {
             var area = gameData.Get(gameData.CurrentArea);
             var name = string.Join(' ', input.Parameters);
+            if (name == "")
+            {
+                output = "attack what?";
+                return this;
+            }
             var enemy = area.Creatures.FirstOrDefault(item 
                 => item.Label.Equals(name, StringComparison.OrdinalIgnoreCase));
             if (enemy is null)
@@ -34,8 +39,9 @@ public record Exploration : GameState
                  output = $"No {name} here.";
                  return this;
             }
+            var creature = gameData.Get(enemy);
             output = "You Are Now In the Combat State.";
-            return new Combat(enemy);
+            return new Combat(enemy, creature.HealthPoints.CurrentHealth);
         }
         if (input.Command == "quit")
         {
@@ -52,7 +58,7 @@ public record Exploration : GameState
     }
 }
 
-public record Combat (CreatureReferenceLabel Enemy) : GameState
+public record Combat (CreatureReferenceLabel Enemy, int EnemyHealth) : GameState
 {
     public override GameState Next(ParsedInput input, GameData gameData, Player player, Random rng, out string output)
     {
@@ -62,10 +68,21 @@ public record Combat (CreatureReferenceLabel Enemy) : GameState
             var total = Dice.D20.Roll(rng) + player.AttackBonus;
             if (total >= creature.ArmorClass)
             {
-                output = $"You hit the creature! You rolled {total}.";
-                return this;
+                var dmg = Dice.D4.Roll(rng);
+                var combat = this with { EnemyHealth = EnemyHealth - dmg };
+                var shown = Math.Max(0, combat.EnemyHealth);
+                output = $"The goblin takes {dmg}. It has {shown} left.";
+                if (combat.EnemyHealth <= 0)
+                { 
+                    output += "\nThe goblin dies."; 
+                    var currentArea = gameData.Get(gameData.CurrentArea);
+                    AreaBuilder.Edit(currentArea)
+                        .WithoutCreature(Enemy)
+                        .Update(gameData);
+                    return new Exploration();
+                }
+                return combat;
             }
-
             output = $"You missed. You scored {total}, and the creature needs {creature.ArmorClass} to be attacked.";
             return this;
         }
