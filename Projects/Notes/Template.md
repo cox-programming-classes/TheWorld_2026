@@ -258,6 +258,50 @@ It doesn't currently, because the answer is always Exploration.
 The goblin's health would have to be updated in either the Combat state 
 or in the creature itself, stored back in the GameData.
 
+Question 9:
+If each state made its own Random, there would be several sources of dice, 
+and you couldn't control them from one place. 
+With one Random in Program.cs that every state is handed, 
+you can seed it once and get the same rolls each run. That makes a fight easy to test.
+
+So the state's method is handed the input and the dice, 
+something like (ParsedInput input, Random rng). 
+Then Combat can roll a d20 with the Random it was handed.
+
+Note:
+gameData comes from WorldBuilder.BuildWorld(), and player comes from PlayerBuilder. 
+Combat needs the GameData to find the creature it's fighting. 
+It needs the Player for the attack roll, because AttackBonus comes from the player, 
+and the player isn't stored in the GameData.
+
+Question 10:
+Exploration hands back a Combat that holds the creature's Id, inside a CreatureReferenceLabel.
+
+To get out of the fight, you can flee. 
+The second way out is when the creature's health reaches zero, and you win.
+
+Once the goblin leaves the area, an attack goblin there finds nothing. 
+You also lose any record that the fight happened, and a body could have kept that.
+
+GameData stores every area, item, and creature once. 
+So for a defeated goblin, the change goes through AreaBuilder, 
+and the updated area gets filed back in the GameData.
+
+Question 11:
+GameOver is one more state, 
+and the loop would say: "keep going while the state is not GameOver."
+quit hands back a GameOver, and that replaces playing.
+
+Notes after coding:
+The cost is that the player would not know what is wrong, 
+but it allows for there to be fewer words printed,
+which would be there for an unknown-command message. 
+When the player presses Enter on a blank line, 
+it prints nothing and the prompt to type a command again, comes back.
+
+Question 12:
+
+
 Notes for coding:
 
 In "Light," "abstract" means you can't create an instance of the type, 
