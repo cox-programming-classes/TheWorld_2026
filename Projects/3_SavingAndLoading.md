@@ -100,7 +100,7 @@ notes.
    STR 13 (+1)   DEX 16 (+3)   CON 12 (+1)
    INT 18 (+4)   WIS 14 (+2)   CHA 17 (+3)
 
-The areas weren't in the JSON because JSON only expresses public properties - Areas is declared private, while CurrentArea is declared public, and thus, only CurrentArea was expressed.
+The areas weren't in the JSON because JSON only expresses public properties - Areas is declared private (dictionary), while CurrentArea is declared public, and thus, only CurrentArea was expressed.
 
 5. Serialize one `Area`, then try to read it back with
    `JsonSerializer.Deserialize<Area>(json)`.  Then do the same with a
@@ -222,6 +222,7 @@ You get a Dice back by choosing from the eight standard dice (for instance, dice
 - ItemReferenceLabel - already DTO because it carries a reference to the item : unchanged
     - Creatures (CreatureReferenceLabel)
     - Neighbors : List<ARL> - Area
+btw DTO is plain data with public constructor, so the serializer can read it back, unlike the real types (with internal and private constructors)
 ## What you're building
 
 1. A set of DTOs:  plain records that hold everything the game needs to come
