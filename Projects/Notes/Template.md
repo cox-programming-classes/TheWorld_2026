@@ -25,40 +25,6 @@ Records - C# referenceLinks to an external site.
 Good search terms, once those run out:  finite state machine, 
 state pattern, state transition diagram, game loop.
 
-## Questions to Research
-Answer these in your notes, in your own words.  They're in roughly the order you'll need them.
-
-Understanding the idea
-What is a finite state machine?  What are its parts?  
-Draw one for something that isn't a game:  
-a traffic light, a vending machine, a door with a lock.
-Nystrom opens with a pile of bool flags that keep growing.  Why do they go wrong?  
-Our loop has one bool already.  What will happen to it as the game grows?
-What's the difference between a state machine, the idea, 
-and the State pattern, one way to write one?
-Reading our code
-Draw our game as a state diagram:  every state, and every arrow between them,
-labeled with what makes it happen.  Start with what the game does today, then add Combat.
-Which of today's commands should work in a fight?  Which shouldn't?  
-For the ones that shouldn't, what should the game say?
-Designing it
-What does a state know?  What does it decide?
-The big one.  Who decides when the state changes?  
-The loop, or the state itself? Sketch it both ways.  
-What does the loop look like when it doesn't need to know which state it's in?
-What does Combat need to remember?  Who you're fighting, surely.  What else?  
-Where you go back to when it's over?
-A fight needs dice.  Where does the Random come from?  
-Think back to Chapter 6, and the one Random at the top of Program.cs.
-How do you get into a fight?  How do you get out?  Is there more than one way, each way?
-What replaces the playing flag?
-For Made It Mine.  A hit should hurt.  Where does the creature's damage live?  
-There are two places it could go: in the Combat state, 
-which remembers how hurt the creature is for as long as the fight lasts, 
-or in the creature itself, stored back in the GameData.  
-HealthPoints has no way to go down today.  
-What happens to the damage, each way, when you flee and come back?
-
 ## Experiments
 
 Do these before you design anything, and paste exactly what happens into your notes.
@@ -182,6 +148,8 @@ Can you save in the middle of a fight?
 - you could come and pick up where you left off of in that state, so you
 - would not have to restart from the "Exploration" state.
 
+## Questions to Research
+Answer these in your notes, in your own words.  They're in roughly the order you'll need them.
 
 Period 1 and HW for Period 2:
 
@@ -217,8 +185,8 @@ it would just say a message that "You can't leave in the middle of a fight.
 Try another command like attack or flee," to tell the player what command they could use next. 
 
 Part 2) I picked attack to start the fight as that would only be one word 
-that can be used to get into the fight and attack the person, 
-though the cost could be that it could be confusing to the user.
+that can be used to get into the fight and attack the person. 
+However, the cost could be that it could be confusing to the user.
 
 Question 6:
 
