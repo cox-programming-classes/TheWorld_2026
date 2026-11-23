@@ -12,6 +12,14 @@ namespace TheWorld.Engine;
 ///
 /// TODO:  Research (Command Pattern):  right now a command is a string, and the switch in Program.cs
 /// matches it to one of these methods.  What if every command were a Type of its own instead?
+///
+/// TODO:  Results, Step 6 (Lesson 9):  Every command hands back a string, whether it worked or not.
+/// "Go where?" and "You can't get to cave from here." come back exactly like a successful look, so
+/// Program.cs can't tell them apart.
+/// Change each command to return Result&lt;string&gt;.  "Go where?" is a ValidationFailure:  the player typed
+/// something incomplete.  Which of the other failures in here are ValidationFailures, and which are ErrorResults?
+/// Then Program.cs decides how each case is shown:  Console.Warn for a failure, plain text for a success,
+/// or whatever you think fits.  The commands still don't print anything.  That's still Lesson 3's split.
 /// </summary>
 public static class Commands
 {

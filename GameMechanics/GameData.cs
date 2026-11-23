@@ -50,8 +50,18 @@ public record GameData
 
     //--------------------------------------------------------------
     //  Methods for adding and retrieving Areas, Items, and Creatures.
-    // TODO:  This is a very simple implementation.  It does not handle duplicates, and it does not handle errors.  It is just a starting point.
     //--------------------------------------------------------------
+
+    // TODO:  Results, Step 4 (Lesson 9):  TryAdd and TryUpdate answer true or false.  When one answers false,
+    // what went wrong?  The caller has to guess.
+    // Change all six to return a Result instead of a bool.  TryAdd(Area area) becomes:
+    //     public Result<AreaReferenceLabel> TryAdd(Area area)
+    // Success hands back the label for the thing that was stored.  A duplicate, or an update to something that
+    // was never stored, is an ErrorResult with a message that says which.
+    // Once these return labels, look at Build(GameData) in AreaBuilder, ItemBuilder, and CreatureBuilder.  Each one
+    // turns a bool into a label or a null.  What should Build(GameData) return now?
+    // While you're here:  does the name "TryAdd" still fit?  "Try" plus a bool was C#'s old way of saying
+    // "this might fail."  What says it now?
 
     // Three methods named TryAdd.  They're Overloads:  C# picks one by the type you hand it.
     public bool TryAdd(Area area) => Areas.TryAdd(area.Id, area);
@@ -88,8 +98,24 @@ public record GameData
 
     //--------------------------------------------------------------
     //  Methods for retrieving Areas, Items, and Creatures by their label.
-    // TODO:  This is a very simple implementation.  It does not handle errors.  It is just a starting point.
     //--------------------------------------------------------------
+
+    // TODO:  Results, Step 3 (Lesson 9, Meeting 1):  Every Get can hand back null, and a null can't say what went wrong.
+    // Was the label null?  Was it a real label, for a thing that isn't in the GameData?  Every caller has to
+    // remember to check, and Commands.Go has a ! in it that promises the null never happens.
+    //
+    // Change all three to return a Result (in Engine/Unions.cs):
+    //     public Result<Area> Get(AreaReferenceLabel? label)
+    // A thing that's found comes back as itself.  A null label, or a label with nothing behind it, comes back as
+    // an ErrorResult whose message says which one happened.
+    //
+    // Why ErrorResult and not ValidationFailure?  A ValidationFailure means the INPUT was bad:  someone typed a
+    // name that's blank.  An ErrorResult means the GAME is broken:  a label points at nothing.  Be ready to
+    // defend which one you picked, every time you pick one.
+    //
+    // Then build.  It won't compile, and that's the point:  every error is a caller that used to be allowed to
+    // ignore a missing thing, and isn't anymore.  Work through the list one at a time.  Each caller gets a
+    // switch that handles every case of the Result, and the compiler checks that you didn't skip one.
 
     // Get gets Overloaded too, now that every kind of label is its own Type.  (In Lesson 7 every key was a string, so it couldn't be.)
     // A null label finds nothing, so gameData.Get(tree)?.Examine() works even when tree might be null.

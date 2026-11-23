@@ -90,6 +90,14 @@ public record PlayerBuilder
 
     /// <summary>
     /// Puts the player together from whatever parts have been set.
+    ///
+    /// TODO:  Results, Step 5 (Lesson 9):  FromName quietly swaps a blank name for "Frank".  Make Build check
+    /// the player instead, and return Validated&lt;Player&gt;.
+    /// Use your ValidateName from Step 1 (and keep FromName from hiding the problem first).  If the name is bad
+    /// AND the ability scores are bad, the ValidationFailure should list both, not just the first one found.
+    /// You'll need a way to take two or more Validated values and either keep all the good values or merge all
+    /// the messages.  What does that code look like?  Where should it live?
+    /// Then fix Program.cs.  What should the game do when the character sheet is invalid?
     /// </summary>
     public Player Build() =>
         Player.Create(_name, _level, _healthPoints, _abilities, _wallet);

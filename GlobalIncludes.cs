@@ -22,9 +22,18 @@ public static class Helpers
     /// `string.IsNullOrWhiteSpace` then catches "" and "                 ".
     /// The `.Trim()` method gets rid of any leading or trailing White-Space characters.
     /// Usage:  Helpers.ValidateString(name, "Frank")
-    /// TODO:  Add more cases to this switch expression to catch other possible invalid strings.
-    /// TODO:  Research:  Use "Regular Expressions" to validate that a name is made up ONLY of
-    /// Alphabet characters, with valid punctuation inside the name.
+    ///
+    /// TODO:  Results, Step 1 (before Lesson 9):  A bad name never makes it out of here.  Hand ValidateString
+    /// "   " and you get "Frank" back, and nobody ever finds out the name was blank.
+    /// Write a new method next to this one:
+    ///     public static Validated&lt;string&gt; ValidateName(string? input)
+    /// It hands back the trimmed name when the name is good, and a ValidationFailure (in Engine/Unions.cs)
+    /// when it isn't.  Check for EVERY problem you can think of, not just the first one you find:  blank,
+    /// too long, characters a name shouldn't have.  A ValidationFailure can carry as many messages as you
+    /// give it, so collect them all and report them together.
+    /// Research:  "Regular Expressions" can check that a name is made up ONLY of letters, with sensible
+    /// punctuation inside it.
+    /// Leave ValidateString where it is for now.  The builders still use it, and Step 5 comes back for them.
     /// </summary>
     /// <returns>The trimmed input, or the fallback when there's nothing there but White-Space.</returns>
     public static string ValidateString(string? input, string fallback) =>
