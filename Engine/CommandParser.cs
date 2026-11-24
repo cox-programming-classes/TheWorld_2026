@@ -1,3 +1,4 @@
+
 namespace TheWorld.Engine;
 
 /// <summary>
@@ -29,3 +30,26 @@ public static class CommandParser
         return new(words[0].ToLowerInvariant(), words[1..]);
     }
 }
+
+
+
+// TRYING TO CODE IT.....
+/*
+namespace TheWorld.Engine;
+
+public static class CommandParser
+{
+    public static Command Parse(string input)
+    {
+        var words = input.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+        // empty line -> unknowncommand with empty word 
+        if (words.Length == 0)
+            return new UnknownCommand(string.Empty, []);
+        
+        //switch statement making Go command for a typed "go"
+        
+        
+    };
+}
+*/

@@ -5,6 +5,7 @@ using TheWorld.Display;
 
 using static TheWorld.Rules.DiceRollStrategies;
 
+
 // This is the one Random Number Generator for the whole program.  We inject it everywhere a roll happens.
 Random rng = new();
 
