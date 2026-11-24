@@ -1,39 +1,323 @@
 # Notes - (your project's name)
+11/13:
+State Machines
 
-Copy this file to `Projects/Notes/`, named for your project, on your branch.
-Write in it every class, and on any night you work.  Short is fine.  Dated is
-required.
 
 ## The problem, in my words
 
-What can't our game do yet, and why can't the code we have do it?  Write it
-before you read anything, then come back and rewrite it at the end.
+The problem is that when the goblin attacks you, you have to attack it back or flee; 
+you shouldn't just be able to go to a different place. 
+Today, when I type attack goblin, it just says "I don't know how to attack." 
+So, even if it attacked you, you wouldn't be able to attack it back. 
+You have to add a state machine to be able to track "in a fight" 
+to be able to have the loop that is "playing" as well as be able to attack in a state.
 
 ## Sources
 
-Every source you used:  a link, and one line on what it taught you.  At least
-one should be a source you found yourself.
-
--
+The loop in Program.cs, then Engine/CommandParser.cs and Engine/Commands.cs.  
+Rules/CombatRules.cs has the numbers a fight needs:  
+ArmorClass and AttackBonus, for players and creatures both.
+Game Programming Patterns, by Robert Nystrom, the chapter on State:  
+gameprogrammingpatterns.com/state.htmlLinks to an external site. 
+Written for game programmers, and free.  It opens with a bug you'll recognize.
+Microsoft's page on records, especially the part on inheritance:  
+Records - C# referenceLinks to an external site.
+Good search terms, once those run out:  finite state machine, 
+state pattern, state transition diagram, game loop.
 
 ## Experiments
 
-What you tried, what happened, and what you learned from it.  Paste the exact
-error when there was one.  The experiments that failed belong here too, and
-they're often the most useful part.
+Do these before you design anything, and paste exactly what happens into your notes.
 
--
+State Machine:
+- Exploration
+- Combat
+
+11/13 class:
+== Kyroki ==  level 1, 0 XP
+HP 6/6    Gold 10
+STR 13 (+1)   DEX 13 (+1)   CON 17 (+3)
+INT 11 (+0)   WIS 13 (+1)   CHA  9 (+0)
+
+Commands:  look, look <item>, go <place>, quit
+
+You are in Clearing.
+A patch of sunlight at the edge of the forest.  Someone camped here, not long ago.
+You see the following items:
+- Statue
+- Lantern
+- Locket
+- Health Potion
+- Chest
+  From here you can go to:
+- Forest
+
+After Typing Commands:
+/Users/haileyduan/Documents/GitHub/TheWorld_2026/bin/Debug/net10.0/TheWorld_2026
+== Kyroki ==  level 1, 0 XP
+HP 10/10    Gold 11
+STR 15 (+2)   DEX 17 (+3)   CON  8 (-1)
+INT  8 (-1)   WIS 13 (+1)   CHA 11 (+0)
+
+Commands:  look, look <item>, go <place>, quit
+
+You are in Clearing.
+A patch of sunlight at the edge of the forest.  Someone camped here, not long ago.
+You see the following items:
+- Statue
+- Lantern
+- Locket
+- Health Potion
+- Chest
+  From here you can go to:
+- Forest
+
+> go forest
+You are in Forest.
+A dark forest.  It has a lot of trees.
+You see the following creatures:
+- Goblin
+- Goblin
+  You see the following items:
+- Tree
+- Tree
+  From here you can go to:
+- Cave
+- Clearing
+
+> look
+You are in Forest.
+A dark forest.  It has a lot of trees.
+You see the following creatures:
+- Goblin
+- Goblin
+  You see the following items:
+- Tree
+- Tree
+  From here you can go to:
+- Cave
+- Clearing
+
+Next I tried doing the command "attack":
+I expected that it would be able to attack. However it says the following:
+> attack goblin
+I don't know how to "attack".
+
 
 ## Decisions
 
-Every design choice that could have gone another way.  For each one:  what you
-chose, what you threw out, what it cost, and what it bought.
+A root type, GameState, with Exploration and Combat under it, 
+and a way for the game to end that replaces the playing flag.
+The game starts in Exploration, and everything that works today still works there.
+The loop asks the current state what to do.  It doesn't check which state it's in.
+attack <creature>, in an area where that creature is, starts a fight.
+In Combat, attack rolls a d20 plus your AttackBonus against the creature's ArmorClass, and says whether you hit.  flee goes back to Exploration.  go gets refused, with a message that makes sense.
+Your notes file, with the answers to the questions above, your state diagram, 
+your sources, and your decisions.
 
--
+## Finished means three things
+The code is on your branch, pushed, and green, and it does everything in What you're building.
+The notes have the questions answered in your words, your state diagram, your sources, 
+and every decision you made with what it cost.
+The presentation is given.  See The Presentation page:  
+fifteen minutes, and one part of it is adding a new state, live, in front of us.
 
 ## Questions for the others
 
-Where does your work touch another project?  Write it as a question for that
-person.
+Commands as Types decides what a command is, and you decide which commands are available.  
+You're both changing the loop in Program.cs.
+Talk to each other in the first class, and agree on what the loop hands to a state.
+- The loop hands the commands to a state. For example, the command "look" would be available 
+- if the state is in the initial state, which is "Exploration" since it wouldn't make sense
+- and thus the command wouldn't be available if you were in a different state like Combat
+- because then there would nothing to look at. 
 
--
+Items That Do Things might want use to work in a fight.  A health potion would.
+- Yes, a health potion would want to be used in a fight because if the state was "Combat",
+- it would be useful if you could use the item, "health potion", if you
+- wanted to heal yourself.
+
+Saving and Loading might want to save which state the game is in.  
+Can you save in the middle of a fight?
+- Yes, you should be able to save in the middle of a fight because
+- you would want to save your data so that if you left the game
+- you would still be able to have your past data and be able to pick
+- off from where you left off of. Furthermore, you would also want to be able to
+- save which state you are in because if you were in a fight and 
+- were in the state "Combat", you would want to be able to save so that
+- you could come and pick up where you left off of in that state, so you
+- would not have to restart from the "Exploration" state.
+
+## Questions to Research
+Answer these in your notes, in your own words.  They're in roughly the order you'll need them.
+
+Period 1 and HW for Period 2:
+
+Question 1:
+A state machine is a program with a finite number of states. 
+An example with a door, the states are Closed and Open, 
+and what moves it from Closed to the state Open is a transition, which is the move itself. 
+The word "push" written on that arrow is the trigger. 
+It's the thing that makes the move happen.
+Note: the door diagram is on paper.
+
+Question 2:
+The flags go wrong because they add more combinations, which can't happen in the real game, 
+and a state machine prevents that. 
+For instance, playing is false for one combination and infight is true.
+
+Question 3:
+A state machine is in one state at a time, for example, 
+like a door that has Closed or Open, 
+and pushing it in the Closed seat would make the state Open, 
+and pulling it from Open would make it closed. 
+The State pattern is making the Closed state one piece of code 
+that knows what to do and same with the Open state.
+
+Question 4:
+Note: the game diagram is on paper.
+
+Period 2 and HW for Period 3:
+
+Question 5:
+Part 1) If the user tries to type "go Cave," 
+it would just say a message that "You can't leave in the middle of a fight. 
+Try another command like attack or flee," to tell the player what command they could use next. 
+
+Part 2) I picked attack to start the fight as that would only be one word 
+that can be used to get into the fight and attack the person. 
+However, the cost could be that it could be confusing to the user.
+
+Question 6:
+
+Part 1)
+The state would be able to decide which commands like look, go, and attack commands 
+are available to use based on the state it is in. With the state deciding, 
+the loop can just tell the state to handle it.
+
+Part 2)
+A state needs to process every command. 
+For example, if the user types "attack goblin," 
+then if they type "attack" again, 
+Combat should know which creature the second attack is aimed at.
+
+The Combat also knows the ID of the one creature it is fighting, 
+since if there were two goblins, 
+then the name wouldn't be enough as you would need to tell them apart.
+
+Period 3 and HW for Period 4:
+
+Question 7:
+
+The loop's cost is that it would have to know which state it is in, 
+and pick what happens, so every new state adds more checks to the loop. 
+I am choosing the state to decide. 
+So, the state's cost is that you would have to tell it which state comes next. 
+When the state decides, the loop stays short and never changes.
+
+Question 8:
+When the player types "flee," the game goes to previous state, 
+which is Exploration, and no, Exploration does not need Combat 
+to tell it where you are as it should already know. 
+No, flee will not always go to Exploration if you add a third state later.
+It would cost that if a third state can start a fight, 
+Combat has to remember which state to go back to. 
+It doesn't currently, because the answer is always Exploration.
+The goblin's health would have to be updated in either the Combat state 
+or in the creature itself, stored back in the GameData.
+
+Question 9:
+If each state made its own Random, there would be several sources of dice, 
+and you couldn't control them from one place. 
+With one Random in Program.cs that every state is handed, 
+you can seed it once and get the same rolls each run. That makes a fight easy to test.
+
+So the state's method is handed the input and the dice, 
+something like (ParsedInput input, Random rng). 
+Then Combat can roll a d20 with the Random it was handed.
+
+Note:
+gameData comes from WorldBuilder.BuildWorld(), and player comes from PlayerBuilder. 
+Combat needs the GameData to find the creature it's fighting. 
+It needs the Player for the attack roll, because AttackBonus comes from the player, 
+and the player isn't stored in the GameData.
+
+Question 10:
+Exploration hands back a Combat that holds the creature's Id, inside a CreatureReferenceLabel.
+
+To get out of the fight, you can flee. 
+The second way out is when the creature's health reaches zero, and you win.
+
+Once the goblin leaves the area, an attack goblin there finds nothing. 
+You also lose any record that the fight happened, and a body could have kept that.
+
+GameData stores every area, item, and creature once. 
+So for a defeated goblin, the change goes through AreaBuilder, 
+and the updated area gets filed back in the GameData.
+
+Question 11:
+GameOver is one more state, 
+and the loop would say: "keep going while the state is not GameOver."
+quit hands back a GameOver, and that replaces playing.
+
+Notes after coding:
+The cost is that the player would not know what is wrong, 
+but it allows for there to be fewer words printed,
+which would be there for an unknown-command message. 
+When the player presses Enter on a blank line, 
+it prints nothing and the prompt to type a command again, comes back.
+
+Question 12:
+For the cost of making the lost health remembered in the combat state, 
+if the player flees and comes back, the goblin would be at full health again.
+The benefit would be that there would be no changes to the starter files.
+
+Follow-up notes during coding after question 12:
+A roll is a fine choice, and there are both costs and benefits:
+a big roll can wipe out a goblin fast, but it's random, which is good.
+
+In terms of the die choices during the Combat state, 
+a d4 means more attacks per fight, so the fight can drag on. 
+The benefit is that a hit never wipes out a goblin.
+
+States with AreaBuilder coding:
+Question 1:
+Edit(area) starts a builder from an area that's already in GameData, 
+and it keeps the area's Id.
+Update(gameData) puts the changed area back where the old one was.
+WithCreature(label) adds a creature to the list.
+Nothing removes a creature. There's no WithoutCreature, so you'd have to add one.
+
+Question 2:
+The two goblins both say "Goblin", but each has its own Id, so Id tells them apart.
+The goblin to leave out is the one whose Id matches the goblin in the fight. 
+Combat holds that label in Enemy, so Enemy.Id is the Id to leave out.
+
+WithCreature builds the new list from the old creatures plus one more. 
+A removing version builds it from the old creatures, 
+keeping only the ones that don't match. 
+
+Question 3:
+The cost of removing the goblin once it dies is that
+once the goblin is gone, the player can't fight it, look at it, or see that it died.
+Removal buys a Forest that matches what happened: a dead goblin isn't there anymore.
+
+A second cost, is that AreaBuilder.cs is changed, 
+which the other projects also use. 
+A benefit is that a dead goblin that stays would break the game's own rules, 
+and removal keeps the game's rules. 
+
+Notes for coding:
+
+In "Light," "abstract" means you can't create an instance of the type, 
+and in "Next()" it means that Light has a method but doesn't say what it does. 
+Override means it doesn't touch past commands, 
+and for example, Red's "Next" says that the next state is Green. 
+Next hands back the next state, 
+so that's what you decide comes next by writing the name of the next state.
+
+The loop has a ParsedInput that the state needs in order to react. 
+GameState promises that every state can take a ParsedInput and hand back the next state, 
+which the loop keeps so it knows which state to call next time around and text to print, 
+which the player sees.
+

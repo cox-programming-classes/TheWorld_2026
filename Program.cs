@@ -1,8 +1,10 @@
+using System.Text.Json;
 using TheWorld.GameMechanics;
 using TheWorld.Engine;
 using TheWorld.Display;
 
 using static TheWorld.Rules.DiceRollStrategies;
+
 
 // This is the one Random Number Generator for the whole program.  We inject it everywhere a roll happens.
 Random rng = new();
@@ -14,6 +16,11 @@ Random rng = new();
 // This is the one GameData for the whole program.  WorldBuilder fills it, and sets CurrentArea to where we start.
 GameData gameData = WorldBuilder.BuildWorld();
 
+var gamedata = WorldBuilder.BuildWorld();
+WorldBuilder.SaveWorld(gamedata, "gamedata.json");
+
+//Console.WriteLine(JsonSerializer.Serialize(gameData));go 
+
 // TODO:  The player still isn't in the GameData.  That's the Chapter 8, Part Four exercise, and it isn't done here yet.
 var player = PlayerBuilder
     .FromName("Kyroki")
@@ -23,7 +30,7 @@ var player = PlayerBuilder
     .Build();
 
 player.ShowSheet();
-Console.Info("Commands:  look, look <item>, go <place>, quit");
+Console.Info("Commands:  look, look <item>, go <place>, quit, take, take <item>");
 Console.WriteLine();
 Console.WriteLine(gameData.Get(gameData.CurrentArea)?.LookAround() ?? "You are nowhere at all.");
 
@@ -34,8 +41,8 @@ Console.WriteLine(gameData.Get(gameData.CurrentArea)?.LookAround() ?? "You are n
 //  In a fight, "go" should mean something else, or nothing at all.
 // ─────────────────────────────────────────────────────────────────────────
 
-var playing = true;
-while (playing)
+GameState gameState = new Exploration();
+while (gameState is not GameOver)
 {
     Console.Write("> ");
     var line = Console.ReadLine();
@@ -46,28 +53,9 @@ while (playing)
 
     var input = CommandParser.Parse(line);
 
-    // TODO:  Research (Command Pattern):  every new command means another case in this switch.
-    switch (input.Command)
-    {
-        case "":
-            break;
-
-        case "look":
-            Console.WriteLine(Commands.Look(gameData, input.Parameters));
-            break;
-
-        case "go":
-            Console.WriteLine(Commands.Go(gameData, input.Parameters));
-            break;
-
-        case "quit":
-            playing = false;
-            break;
-
-        default:
-            Console.Warn("I don't know how to \"{0}\".", input.Command);
-            break;
-    }
+    gameState = gameState.Next(input, gameData, player, rng, out var output);
+    if (output.Length > 0)
+        Console.WriteLine(output);
 }
 
 Console.WriteLine("Goodbye!");

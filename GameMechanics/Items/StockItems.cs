@@ -1,4 +1,6 @@
 namespace TheWorld.GameMechanics.StockEntities;
+using TheWorld.GameMechanics.Items;
+
 
 /// <summary>
 /// Ready-made items, from more than one kind of game.
@@ -61,9 +63,10 @@ public static class StockItems
     // ---- Carryable and usable. ----
 
     public static Item Lantern =>
-        ItemBuilder.FromName("Lantern")
-            .WithDescription("A brass oil lantern.  It sloshes when you shake it.")
-            .Build();
+        new Lantern("Lantern", "A brass oil lantern.  It sloshes when you shake it.");
+        //ItemBuilder.FromName("Lantern")
+          //  .WithDescription("")
+            //.new lantern();
 
     public static Item HealthPotion =>
         ItemBuilder.FromName("Health Potion")

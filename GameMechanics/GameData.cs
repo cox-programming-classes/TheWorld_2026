@@ -15,12 +15,14 @@ public record GameData
     /// All the Area's in the game!
     /// </summary>
     private Dictionary<Guid,Area> Areas { get; init; } = [];
+    public IReadOnlyDictionary<Guid, Area> ReadAreas=> Areas;
 
     /// <summary>
     /// All the Item's in the game!
     /// </summary>
     private Dictionary<Guid, Item> Items { get; init; } = [];
-
+    public IReadOnlyDictionary<Guid, Item> ReadItems => Items;
+    
     /// <summary>
     /// All the Creature's in the game!
     /// </summary>
