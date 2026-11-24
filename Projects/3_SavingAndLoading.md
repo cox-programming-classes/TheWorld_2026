@@ -48,7 +48,7 @@ record - public serialization
   since Chapter 6.
 - Microsoft's overview of `System.Text.Json`, the JSON library that comes with
   .NET:
-  [Serialize and deserialize JSON using C#](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview).
+  [Serialize and deserialize JSON using C#](https://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overviewhttps://learn.microsoft.com/en-us/dotnet/standard/serialization/system-text-json/overview).
   The how-to pages linked from it have the examples.
 - Martin Fowler's short entry on the **Data Transfer Object**:
   [martinfowler.com/eaaCatalog/dataTransferObject.html](https://martinfowler.com/eaaCatalog/dataTransferObject.html).
@@ -219,7 +219,7 @@ You get a Dice back by choosing from the eight standard dice (for instance, dice
 
 - areas have collections of items that already exist
   AreaDTO
-- ItemReferenceLabel - already DTO because it carries a reference to the item : unchanged
+- ItemReferenceLabel - already DTO (or DTO-like) because it carries a reference (label - name and Id) to the item : unchanged, safe to serialize by itself without needing to make a DTO
     - Creatures (CreatureReferenceLabel)
     - Neighbors : List<ARL> - Area
 btw DTO is plain data with public constructor, so the serializer can read it back, unlike the real types (with internal and private constructors)
