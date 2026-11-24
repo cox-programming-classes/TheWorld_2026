@@ -15,11 +15,13 @@ namespace TheWorld.Engine;
 ///
 /// TODO:  Results, Step 6 (Lesson 9):  Every command hands back a string, whether it worked or not.
 /// "Go where?" and "You can't get to cave from here." come back exactly like a successful look, so
-/// Program.cs can't tell them apart.
+/// GameState can't tell them apart, and neither can Program.cs, which prints whatever string it's handed.
 /// Change each command to return Result&lt;string&gt;.  "Go where?" is a ValidationFailure:  the player typed
 /// something incomplete.  Which of the other failures in here are ValidationFailures, and which are ErrorResults?
-/// Then Program.cs decides how each case is shown:  Console.Warn for a failure, plain text for a success,
-/// or whatever you think fits.  The commands still don't print anything.  That's still Lesson 3's split.
+/// "attack" lives in GameState.cs, not here, but it's a command too, with failures of its own.
+/// Then decide where each case gets shown:  Console.Warn for a failure, plain text for a success, or whatever
+/// you think fits.  Right now GameState.Next hands Program.cs a plain string.  Should it hand over the Result
+/// instead?  The commands still don't print anything.  That's still Lesson 3's split.
 /// </summary>
 public static class Commands
 {
