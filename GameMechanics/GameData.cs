@@ -113,12 +113,13 @@ public record GameData
     // name that's blank.  An ErrorResult means the GAME is broken:  a label points at nothing.  Be ready to
     // defend which one you picked, every time you pick one.
     //
-    // Then build.  It won't compile, and that's the point:  every error is a caller that used to be allowed to
-    // ignore a missing thing, and isn't anymore.  Work through the list one at a time.  Each caller gets a
-    // switch that handles every case of the Result, and the compiler checks that you didn't skip one.
-    // Some of those errors aren't news.  Build before you start, and look at the warnings in GameState.cs:
-    // the compiler has been telling you about four of these callers for a while.  A warning is easy to scroll
-    // past.  An error isn't.
+    // Build before you start, and look at the warnings in GameState.cs:  the compiler has been telling you
+    // about four of these callers for a while.  A warning is easy to scroll past.  An error isn't.
+    //
+    // Then change Get, and build.  It won't compile, and that's the point:  every error is a caller that used
+    // to be allowed to ignore a missing thing, and isn't anymore.  Each caller gets a switch that handles every
+    // case of the Result, and the compiler checks that you didn't skip one.
+    // This step fixes Commands.Look and Commands.Go.  Steps 3b and 3c are the rest of the list.
 
     // Get gets Overloaded too, now that every kind of label is its own Type.  (In Lesson 7 every key was a string, so it couldn't be.)
     // A null label finds nothing, so gameData.Get(tree)?.Examine() works even when tree might be null.

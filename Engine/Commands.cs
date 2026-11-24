@@ -66,6 +66,13 @@ public static class Commands
         return gameData.Get(neighbor)!.LookAround();
     }
 
+    // TODO:  Results, Step 3c (Lesson 9, Meeting 3):  Take and Use were written before Get handed back a Result.
+    // Give Take Look's shape first:  Take opens the Result, and a TakeFrom does the work with a real Area.
+    // Then fix what's left with the SMALLEST change that builds.  Touch only the lines the compiler points at.
+    // Do the same to Use.
+    // Then add "take" to Exploration in GameState.cs, the way "look" is there, and play:  take lantern,
+    // take statue, take banana.  Is every answer right?  If one isn't, find the line that should have caught it,
+    // and work out why the compiler never said a word about it.
     public static string Take(GameData gameData, IReadOnlyList<string> parameters)
     {
         var area = gameData.Get(gameData.CurrentArea);

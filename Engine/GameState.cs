@@ -4,6 +4,13 @@ using TheWorld.Rules;
 
 namespace TheWorld.Engine;
 
+// TODO:  Results, Step 3b (Lesson 9, Meeting 3):  After Step 3, every Get in here hands back a Result, and
+// "attack" is where four of the errors are.  Before Step 3, they were the four warnings.
+// Give each Get a switch, the way Look and Go have one.  Next hands back two things, the next state and the
+// output, so a switch arm here has to make a pair of them.  Chapter 2's tuples can.
+// Do this one after the three errors outside Engine:  the one where Program.cs shows the start of the game, and
+// the two Gets in WorldBuilder.cs.  Nothing a player types can make those three fail.  What should they do?
+
 public abstract record GameState
 {
     public abstract GameState Next(ParsedInput input, GameData gameData, Player player, Random rng, out string output);
