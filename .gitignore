@@ -1,5 +1,6 @@
 # .NET build output
 bin/
+gamedata.json
 obj/
 [Dd]ebug/
 [Rr]elease/

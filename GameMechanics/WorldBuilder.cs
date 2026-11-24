@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TheWorld.GameMechanics.StockEntities;
 
 namespace TheWorld.GameMechanics;
@@ -83,6 +84,20 @@ public static class WorldBuilder
             .WithNeighbor(forest!)
             .Build(gameData);
 
+        
+      //  string json = JsonSerializer.Serialize(clearing!);
+       // Console.WriteLine(json);
+       
+       //var area = gameData.Get(clearing!);
+      // string json = JsonSerializer.Serialize(area);
+      // Console.WriteLine(json);
+       //var copy = JsonSerializer.Deserialize <Area> (json);
+
+      // var creature = gameData.Get(wolf!);
+      // string json2 = JsonSerializer.Serialize(creature);
+      // Console.WriteLine(json2);
+      // var copy2 = JsonSerializer.Deserialize <Creature> (json2);
+
         // ---- Ways out.  The forest was built first, so it learns about the others by Update. ----
 
         AreaBuilder.Edit(gameData.Get(forest)!)
@@ -96,4 +111,23 @@ public static class WorldBuilder
 
         return gameData;
     }
+
+    public static void SaveWorld(GameData gamedata, string path)
+    {
+        var itemDtos = gamedata.ReadItems.Values.
+            Select(i => new ItemDto(i.Id, i.Name, i.Description)).
+            ToList();
+        
+        var areaDtos = gamedata.ReadAreas.Values
+            .Select(a => new AreaDto(a.Id, a.Name, a.Description, a.Items, a.Creatures, a.Neighbors)).
+            ToList();
+       
+        var dto = new GameDataDto(itemDtos, areaDtos, gamedata.CurrentArea);
+        
+        var options = new JsonSerializerOptions { WriteIndented = true };
+        string json = JsonSerializer.Serialize(dto, options);
+        File.WriteAllText(path, json);
+        Console.WriteLine(Path.GetFullPath(path));
+    }
+ 
 }
