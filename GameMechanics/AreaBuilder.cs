@@ -61,6 +61,8 @@ public record AreaBuilder
     /// </summary>
     public AreaBuilder WithCreature(CreatureReferenceLabel creature) =>
         this with { _creatures = [.. _creatures, creature] };
+    public AreaBuilder WithoutCreature(CreatureReferenceLabel creature) =>
+        this with { _creatures = _creatures.Where(c => c.Id != creature.Id).ToList() };
 
     public AreaBuilder WithItem(ItemReferenceLabel item) =>
         this with { _items = [.. _items, item] };

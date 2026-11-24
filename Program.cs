@@ -34,8 +34,8 @@ Console.WriteLine(gameData.Get(gameData.CurrentArea)?.LookAround() ?? "You are n
 //  In a fight, "go" should mean something else, or nothing at all.
 // ─────────────────────────────────────────────────────────────────────────
 
-var playing = true;
-while (playing)
+GameState gameState = new Exploration();
+while (gameState is not GameOver)
 {
     Console.Write("> ");
     var line = Console.ReadLine();
@@ -46,31 +46,9 @@ while (playing)
 
     var input = CommandParser.Parse(line);
 
-    // TODO:  Research (Command Pattern):  every new command means another case in this switch.
-    switch (input.Command)
-    {
-        case "":
-            break;
-
-        case "look":
-            Console.WriteLine(Commands.Look(gameData, input.Parameters));
-            break;
-
-        case "go":
-            Console.WriteLine(Commands.Go(gameData, input.Parameters));
-            break;
-
-        case "quit":
-            playing = false;
-            break;
-        //case "use":
-            //Console.WriteLine(Commands.Use(gameData, input.Parameters));
-            //break;
-        
-        default:
-            Console.Warn("I don't know how to \"{0}\".", input.Command);
-            break;
-    }
+    gameState = gameState.Next(input, gameData, player, rng, out var output);
+    if (output.Length > 0)
+        Console.WriteLine(output);
 }
 
 Console.WriteLine("Goodbye!");
