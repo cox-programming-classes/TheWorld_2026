@@ -100,7 +100,7 @@ public record GameData
     //  Methods for retrieving Areas, Items, and Creatures by their label.
     //--------------------------------------------------------------
 
-    // TODO:  Results, Step 3 (Lesson 9, Meeting 1):  Every Get can hand back null, and a null can't say what went wrong.
+    // TODO:  Results, Step 3 (Lesson 9, Meeting 2):  Every Get can hand back null, and a null can't say what went wrong.
     // Was the label null?  Was it a real label, for a thing that isn't in the GameData?  Every caller has to
     // remember to check, and Commands.Go has a ! in it that promises the null never happens.
     //

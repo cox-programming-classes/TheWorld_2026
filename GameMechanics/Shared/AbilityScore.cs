@@ -44,7 +44,7 @@ public record AbilityScore
     /// to validate the values before creating the object.
     /// It is also good to be able to create an instance with a known set of values.
     ///
-    /// TODO:  Results, Step 2 (before Lesson 9):  null tells you THAT Create failed.  It doesn't tell you why.
+    /// TODO:  Results, Step 2 (Lesson 9, homework after Meeting 1):  null tells you THAT Create failed.  It doesn't tell you why.
     /// Call Create(20, 2, 10, 10, 10, 25) and you get null.  Which score was wrong?  All of them?
     /// It also stops at the first bad score, so three bad scores look exactly like one.
     /// Change Create so it returns Validated&lt;AbilityScore&gt; (in Engine/Unions.cs) instead of AbilityScore?.

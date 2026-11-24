@@ -23,7 +23,7 @@ public static class Helpers
     /// The `.Trim()` method gets rid of any leading or trailing White-Space characters.
     /// Usage:  Helpers.ValidateString(name, "Frank")
     ///
-    /// TODO:  Results, Step 1 (before Lesson 9):  A bad name never makes it out of here.  Hand ValidateString
+    /// TODO:  Results, Step 1 (Lesson 9, homework after Meeting 1):  A bad name never makes it out of here.  Hand ValidateString
     /// "   " and you get "Frank" back, and nobody ever finds out the name was blank.
     /// Write a new method next to this one:
     ///     public static Validated&lt;string&gt; ValidateName(string? input)
