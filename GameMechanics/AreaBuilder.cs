@@ -66,6 +66,9 @@ public record AreaBuilder
 
     public AreaBuilder WithItem(ItemReferenceLabel item) =>
         this with { _items = [.. _items, item] };
+    
+    public AreaBuilder WithoutItem(ItemReferenceLabel item) =>
+        this with { _items = [.. _items.Where(b => b != item)] };
 
     /// <summary>
     /// Adds a way out of the area being built.  The neighbor must already be in the GameData.
