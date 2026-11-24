@@ -63,9 +63,6 @@ while (playing)
         case "quit":
             playing = false;
             break;
-        case "take":
-            Console.WriteLine(Commands.Take(gameData, input.Parameters));
-            break;
         //case "use":
             //Console.WriteLine(Commands.Use(gameData, input.Parameters));
             //break;
